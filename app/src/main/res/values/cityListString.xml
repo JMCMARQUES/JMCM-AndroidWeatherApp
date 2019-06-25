@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cityList">
+        <item>Guimães</item>
+        <item>Braga</item>
+        <item>Vila do Conde</item>
+        <item>Porto</item>
+        <item>Santa Maria da Feira</item>
+        <item>Aveiro</item>
+        <item>Coimbra</item>
+        <item>Lisboa</item>
+        <item>Évora</item>
+        <item>Faro</item>
+    </string-array>
+</resources>
