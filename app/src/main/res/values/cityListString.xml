@@ -10,6 +10,13 @@
         <item>Coimbra</item>
         <item>Lisboa</item>
         <item>Évora</item>
-        <item>Faro</item>
+        <item>Bristol</item>
+        <item>London</item>
+        <item>New York</item>
+        <item>Washington</item>
+        <item>Dublin</item>
+        <item>Paris</item>
+        <item>Stuttgart</item>
+        <item>Frankfurt</item>
     </string-array>
 </resources>
