@@ -114,8 +114,57 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.buttonCountry)
+    public void getDataCountry() {
+        String city = spinnerCountry.getSelectedItem().toString();
+
+        weatherAPIRequest.retrieveData(city)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WeatherData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        System.out.println("New thread created; this created thread is being observed on the main thread; a subscription was made, by the new thread, to a new observer<WeatherData>");
+                    }
+
+                    @Override
+                    public void onNext(WeatherData weatherData) {
+                        if (weatherData != null) {
+
+                            double tempInDegreeC = weatherData.main.temp - 273.15;
+                            double minTempInDegreeC = weatherData.main.temp_min - 273.15;
+                            double maxTempInDegreeC = weatherData.main.temp_max - 273.15;
+
+                            DecimalFormat temperature = new DecimalFormat("#.00");
+
+                            String message = weatherData.sys.country + "\n" + city + ": " +
+                                    "\n - Temperature: " + temperature.format(tempInDegreeC) +
+                                    "ºC\n - Humidity: " + weatherData.main.humidity +
+                                    "%\n - Minimum Temperature: " + temperature.format(minTempInDegreeC) +
+                                    "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
+                                    "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
+
+                            System.out.println(message);
+                            textView.setText(message);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        System.out.println(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+
+
     @OnClick(R.id.buttonCity)
-    public void getData() {
+    public void getDataCity() {
         String city = spinner.getSelectedItem().toString();
 
         weatherAPIRequest.retrieveData(city)
@@ -144,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                     "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
                                     "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
 
+                            System.out.println(message);
                             textView.setText(message);
                         }
                     }
