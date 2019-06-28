@@ -7,9 +7,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.jmcm_androidweatherapp.JsonClasses.WeatherData;
+import com.example.jmcm_androidweatherapp.apis.Country.CountryAPIRequest;
+import com.example.jmcm_androidweatherapp.apis.Country.CountryCityData;
+import com.example.jmcm_androidweatherapp.apis.Country.country;
+import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherAPIRequest;
+import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherData;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,10 +28,14 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     private WeatherAPIRequest weatherAPIRequest;
+    private CountryAPIRequest countryAPIRequest;
     private String key = "5e41726cfce9965c4d22634201bd1e83";
 
     @BindView(R.id.spinner)
     public Spinner spinner;
+
+    @BindView(R.id.spinnerCountry)
+    public Spinner spinnerCountry;
 
     @BindView(R.id.textView)
     public TextView textView;
@@ -38,18 +47,74 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         weatherAPIRequest = new WeatherAPIRequest(key);
+        countryAPIRequest = new CountryAPIRequest();
         spinnerLoad();
+
+        getCountryData();
     }
 
+
+    public void spinnerCountryLoad(ArrayList<String> arrayList) {
+        ArrayAdapter<String> adapterCountry = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,
+                arrayList);
+        spinnerCountry.setAdapter(adapterCountry);
+    }
 
     public void spinnerLoad() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cityList, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this,
+                R.array.cityList,
+                android.R.layout.simple_spinner_item);
+        adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapterCity);
     }
 
 
-    @OnClick(R.id.button)
+    public void getCountryData() {
+        countryAPIRequest.retrieveData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CountryCityData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(CountryCityData countryCityData) {
+                        if (countryCityData != null) {
+
+                            ArrayList<String> countries = new ArrayList<>();
+
+                            for (country e : countryCityData.result) {
+                                String newCountry = e.getName();
+                                countries.add(newCountry);
+                            }
+
+                            spinnerCountryLoad(countries);
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        System.out.println();
+                        System.out.println("ERROR!");
+                        e.printStackTrace();
+                        e.getMessage();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    @OnClick(R.id.buttonCity)
     public void getData() {
         String city = spinner.getSelectedItem().toString();
 
