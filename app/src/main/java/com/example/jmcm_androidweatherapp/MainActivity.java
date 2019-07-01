@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WeatherAPIRequest weatherAPIRequest;
     private CountryAPIRequest countryAPIRequest;
+    private static final String ON_SUBSCRIBE_MESSAGE="New thread created; this created thread is being observed on the main thread; a subscription was made, by the new thread, to a new observer<WeatherData>";
     private String key = "5e41726cfce9965c4d22634201bd1e83";
 
     @BindView(R.id.spinner)
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         weatherAPIRequest = new WeatherAPIRequest(key);
         countryAPIRequest = new CountryAPIRequest();
         spinnerLoad();
-
         getCountryData();
     }
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Observer<CountryCityData>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        System.out.println(ON_SUBSCRIBE_MESSAGE);
                     }
 
                     @Override
@@ -90,17 +90,12 @@ public class MainActivity extends AppCompatActivity {
                                 String newCountry = e.getName();
                                 countries.add(newCountry);
                             }
-
                             spinnerCountryLoad(countries);
-
-
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
-                        System.out.println();
                         System.out.println("ERROR!");
                         e.printStackTrace();
                         e.getMessage();
@@ -124,35 +119,21 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Observer<WeatherData>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        System.out.println("New thread created; this created thread is being observed on the main thread; a subscription was made, by the new thread, to a new observer<WeatherData>");
+                        System.out.println(ON_SUBSCRIBE_MESSAGE);
                     }
 
                     @Override
                     public void onNext(WeatherData weatherData) {
-                        if (weatherData != null) {
 
-                            double tempInDegreeC = weatherData.main.temp - 273.15;
-                            double minTempInDegreeC = weatherData.main.temp_min - 273.15;
-                            double maxTempInDegreeC = weatherData.main.temp_max - 273.15;
+                        messageBuild(weatherData, city);
 
-                            DecimalFormat temperature = new DecimalFormat("#.00");
-
-                            String message = weatherData.sys.country + "\n" + city + ": " +
-                                    "\n - Temperature: " + temperature.format(tempInDegreeC) +
-                                    "ºC\n - Humidity: " + weatherData.main.humidity +
-                                    "%\n - Minimum Temperature: " + temperature.format(minTempInDegreeC) +
-                                    "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
-                                    "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
-
-                            System.out.println(message);
-                            textView.setText(message);
-                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        System.out.println("GET DATA COUNTRY ERROR!");
                         e.printStackTrace();
-                        System.out.println(e.getMessage());
+                        e.getMessage();
                     }
 
                     @Override
@@ -160,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 
     @OnClick(R.id.buttonCity)
@@ -178,28 +158,12 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(WeatherData weatherData) {
-                        if (weatherData != null) {
-
-                            double tempInDegreeC = weatherData.main.temp - 273.15;
-                            double minTempInDegreeC = weatherData.main.temp_min - 273.15;
-                            double maxTempInDegreeC = weatherData.main.temp_max - 273.15;
-
-                            DecimalFormat temperature = new DecimalFormat("#.00");
-
-                            String message = weatherData.sys.country + "\n" + city + ": " +
-                                    "\n - Temperature: " + temperature.format(tempInDegreeC) +
-                                    "ºC\n - Humidity: " + weatherData.main.humidity +
-                                    "%\n - Minimum Temperature: " + temperature.format(minTempInDegreeC) +
-                                    "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
-                                    "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
-
-                            System.out.println(message);
-                            textView.setText(message);
-                        }
+                        messageBuild(weatherData, city);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        System.out.println("GET DATA CITY ERROR!");
                         e.printStackTrace();
                         System.out.println(e.getMessage());
                     }
@@ -208,5 +172,29 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete() {
                     }
                 });
+    }
+
+
+    private void messageBuild(WeatherData weatherData, String city) {
+        if (weatherData != null) {
+
+            double tempInDegreeC = weatherData.main.temp - 273.15;
+            double minTempInDegreeC = weatherData.main.temp_min - 273.15;
+            double maxTempInDegreeC = weatherData.main.temp_max - 273.15;
+
+            DecimalFormat temperature = new DecimalFormat("#.00");
+
+            String message = weatherData.sys.country + "\n" + city + ": " +
+                    "\n - Temperature: " + temperature.format(tempInDegreeC) +
+                    "ºC\n - Humidity: " + weatherData.main.humidity +
+                    "%\n - Minimum Temperature: " + temperature.format(minTempInDegreeC) +
+                    "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
+                    "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
+
+            System.out.println(message);
+            textView.setText(message);
+        } else {
+            textView.setText("No data available for the given location");
+        }
     }
 }
