@@ -1,4 +1,4 @@
-package com.example.jmcm_androidweatherapp.apis.Country;
+package com.example.jmcm_androidweatherapp.apis.country;
 
 
 import io.reactivex.Observable;
