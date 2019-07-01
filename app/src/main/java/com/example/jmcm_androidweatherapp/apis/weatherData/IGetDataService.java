@@ -1,6 +1,4 @@
-package com.example.jmcm_androidweatherapp;
-
-import com.example.jmcm_androidweatherapp.JsonClasses.WeatherData;
+package com.example.jmcm_androidweatherapp.apis.weatherData;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

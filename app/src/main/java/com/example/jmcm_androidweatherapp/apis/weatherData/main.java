@@ -1,4 +1,4 @@
-package com.example.jmcm_androidweatherapp.JsonClasses;
+package com.example.jmcm_androidweatherapp.apis.weatherData;
 
 public class main {
 

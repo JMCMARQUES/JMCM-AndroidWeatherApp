@@ -1,6 +1,7 @@
-package com.example.jmcm_androidweatherapp;
+package com.example.jmcm_androidweatherapp.apis.weatherData;
 
-import com.example.jmcm_androidweatherapp.JsonClasses.WeatherData;
+import com.example.jmcm_androidweatherapp.apis.weatherData.IGetDataService;
+import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherData;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;

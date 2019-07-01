@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">JMCM-AndroidWeatherApp</string>
     <string name="cityButton">Select the City</string>
+    <string name="countryButton">Select the Country</string>
 </resources>

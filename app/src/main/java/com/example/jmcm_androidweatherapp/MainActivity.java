@@ -7,9 +7,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.jmcm_androidweatherapp.JsonClasses.WeatherData;
+import com.example.jmcm_androidweatherapp.apis.Country.CountryAPIRequest;
+import com.example.jmcm_androidweatherapp.apis.Country.CountryCityData;
+import com.example.jmcm_androidweatherapp.apis.Country.country;
+import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherAPIRequest;
+import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherData;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,10 +28,14 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     private WeatherAPIRequest weatherAPIRequest;
+    private CountryAPIRequest countryAPIRequest;
     private String key = "5e41726cfce9965c4d22634201bd1e83";
 
     @BindView(R.id.spinner)
     public Spinner spinner;
+
+    @BindView(R.id.spinnerCountry)
+    public Spinner spinnerCountry;
 
     @BindView(R.id.textView)
     public TextView textView;
@@ -38,19 +47,124 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         weatherAPIRequest = new WeatherAPIRequest(key);
+        countryAPIRequest = new CountryAPIRequest();
         spinnerLoad();
+
+        getCountryData();
     }
 
+
+    public void spinnerCountryLoad(ArrayList<String> arrayList) {
+        ArrayAdapter<String> adapterCountry = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,
+                arrayList);
+        spinnerCountry.setAdapter(adapterCountry);
+    }
 
     public void spinnerLoad() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cityList, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this,
+                R.array.cityList,
+                android.R.layout.simple_spinner_item);
+        adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapterCity);
     }
 
 
-    @OnClick(R.id.button)
-    public void getData() {
+    public void getCountryData() {
+        countryAPIRequest.retrieveData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CountryCityData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(CountryCityData countryCityData) {
+                        if (countryCityData != null) {
+
+                            ArrayList<String> countries = new ArrayList<>();
+
+                            for (country e : countryCityData.result) {
+                                String newCountry = e.getName();
+                                countries.add(newCountry);
+                            }
+
+                            spinnerCountryLoad(countries);
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        System.out.println();
+                        System.out.println("ERROR!");
+                        e.printStackTrace();
+                        e.getMessage();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    @OnClick(R.id.buttonCountry)
+    public void getDataCountry() {
+        String city = spinnerCountry.getSelectedItem().toString();
+
+        weatherAPIRequest.retrieveData(city)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WeatherData>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        System.out.println("New thread created; this created thread is being observed on the main thread; a subscription was made, by the new thread, to a new observer<WeatherData>");
+                    }
+
+                    @Override
+                    public void onNext(WeatherData weatherData) {
+                        if (weatherData != null) {
+
+                            double tempInDegreeC = weatherData.main.temp - 273.15;
+                            double minTempInDegreeC = weatherData.main.temp_min - 273.15;
+                            double maxTempInDegreeC = weatherData.main.temp_max - 273.15;
+
+                            DecimalFormat temperature = new DecimalFormat("#.00");
+
+                            String message = weatherData.sys.country + "\n" + city + ": " +
+                                    "\n - Temperature: " + temperature.format(tempInDegreeC) +
+                                    "ºC\n - Humidity: " + weatherData.main.humidity +
+                                    "%\n - Minimum Temperature: " + temperature.format(minTempInDegreeC) +
+                                    "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
+                                    "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
+
+                            System.out.println(message);
+                            textView.setText(message);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        System.out.println(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+
+
+    @OnClick(R.id.buttonCity)
+    public void getDataCity() {
         String city = spinner.getSelectedItem().toString();
 
         weatherAPIRequest.retrieveData(city)
@@ -79,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                                     "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
                                     "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
 
+                            System.out.println(message);
                             textView.setText(message);
                         }
                     }
