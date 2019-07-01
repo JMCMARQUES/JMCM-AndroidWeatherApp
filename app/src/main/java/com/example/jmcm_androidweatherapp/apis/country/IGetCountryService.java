@@ -1,10 +1,7 @@
-package com.example.jmcm_androidweatherapp.apis.Country;
-
-import java.util.ArrayList;
+package com.example.jmcm_androidweatherapp.apis.country;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public interface IGetCountryService {
 
