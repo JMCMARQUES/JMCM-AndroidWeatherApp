@@ -1,8 +1,6 @@
 package com.example.jmcm_androidweatherapp.apis.Country;
 
 
-import java.util.ArrayList;
-
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -12,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CountryAPIRequest {
 
     private IGetCountryService service;
-    private ArrayList country;
 
     public CountryAPIRequest() {
 
