@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jmcm_androidweatherapp.R;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainActivityAction;
@@ -77,4 +78,10 @@ public class MainActivity extends AppCompatActivity implements IMainActivityActi
         adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapterCity);
     }
+
+    @Override
+    public void errorMessage(String string){
+        Toast.makeText(this,string,Toast.LENGTH_LONG).show();
+    }
+
 }

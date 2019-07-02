@@ -50,14 +50,15 @@ public class MainInteractor implements IMainInteractor {
                             }
                             System.out.println("onNext: " + countriesList);
                             listener.onSuccess(countriesList);
+                        }else{
+                            Throwable e = new Throwable("Country list empty, not available!");
+                            onError(e);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("ERROR!");
-                        e.printStackTrace();
-                        e.getMessage();
+                        listener.onError(e);
                     }
 
                     @Override
@@ -85,15 +86,17 @@ public class MainInteractor implements IMainInteractor {
 
                     @Override
                     public void onNext(WeatherData weatherData) {
-
-                        listener.onSuccess(messageBuild(weatherData, cityOrCountry));
+                        if (weatherData != null) {
+                            listener.onSuccess(messageBuild(weatherData, cityOrCountry));
+                        }else{
+                            Throwable e = new Throwable("Country Data empty, not available!");
+                            onError(e);
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("GET DATA COUNTRY ERROR!");
-                        e.printStackTrace();
-                        e.getMessage();
+                        listener.onError(e);
                     }
 
                     @Override

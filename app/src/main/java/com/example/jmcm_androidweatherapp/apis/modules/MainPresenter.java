@@ -22,7 +22,9 @@ public class MainPresenter implements IMainPresenter {
 
         mInteractor.getCountryData(new IMainInteractor.IOnLoadingCountryAPI() {
             @Override
-            public void onError(String e) {
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                mView.errorMessage(e.getMessage());
             }
 
             @Override
@@ -37,7 +39,9 @@ public class MainPresenter implements IMainPresenter {
 
         mInteractor.getWeatherData(cityOrCountry, new IMainInteractor.IOnLoadngWeatherAPI() {
             @Override
-            public void onError(String e) {
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                mView.errorMessage(e.getMessage());
             }
 
             @Override

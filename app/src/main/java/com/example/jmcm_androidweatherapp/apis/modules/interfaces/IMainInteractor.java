@@ -9,12 +9,12 @@ public interface IMainInteractor {
     public void getWeatherData(String city, IOnLoadngWeatherAPI weatherAPI);
 
     interface IOnLoadingCountryAPI {
-        void onError(String e);
+        void onError(Throwable e);
         void onSuccess(ArrayList<String> countries);
     }
 
     interface IOnLoadngWeatherAPI {
-        void onError(String e);
+        void onError(Throwable e);
         void onSuccess(String weatherData);
     }
 
