@@ -52,7 +52,7 @@ public class MainInteractor implements IMainInteractor {
                             listener.onSuccess(countriesList);
                         }else{
                             Throwable e = new Throwable("Country list empty, not available!");
-                            onError(e);
+                            listener.onError(e);
                         }
                     }
 
@@ -90,7 +90,7 @@ public class MainInteractor implements IMainInteractor {
                             listener.onSuccess(messageBuild(weatherData, cityOrCountry));
                         }else{
                             Throwable e = new Throwable("Country Data empty, not available!");
-                            onError(e);
+                            listener.onError(e);
                         }
                     }
 
