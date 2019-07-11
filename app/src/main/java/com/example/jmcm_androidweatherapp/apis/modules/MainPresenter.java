@@ -24,12 +24,14 @@ public class MainPresenter implements IMainPresenter {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.hideProgress();
                 mView.errorMessage(e.getMessage());
             }
 
             @Override
             public void onSuccess(ArrayList<String> countries) {
                 mView.onCountryData(countries);
+                mView.hideProgress();
             }
         });
     }
@@ -41,12 +43,14 @@ public class MainPresenter implements IMainPresenter {
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
+                mView.hideProgress();
                 mView.errorMessage(e.getMessage());
             }
 
             @Override
             public void onSuccess(String weatherData) {
                 mView.setText(weatherData);
+                mView.hideProgress();
             }
         });
     }
