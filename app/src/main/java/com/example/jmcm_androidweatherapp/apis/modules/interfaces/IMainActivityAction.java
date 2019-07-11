@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface IMainActivityAction {
 
 
-    public void onCountryData(ArrayList<String> countries);
-    public void setText(String message);
-    public void errorMessage(String string);
+    void onCountryData(ArrayList<String> countries);
+    void setText(String message);
+    void errorMessage(String string);
 }

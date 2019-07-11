@@ -1,6 +1,7 @@
 package com.example.jmcm_androidweatherapp.apis.modules;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -11,13 +12,13 @@ import android.widget.Toast;
 import com.example.jmcm_androidweatherapp.R;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainActivityAction;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainPresenter;
+import com.example.jmcm_androidweatherapp.apis.weatherData.FailToGetDataFromAPIDialogFragment;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 
 public class MainActivity extends AppCompatActivity implements IMainActivityAction {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityActi
     }
 
     @Override
-    public void setText(String message){
+    public void setText(String message) {
         textView.setText(message);
     }
 
@@ -80,8 +81,16 @@ public class MainActivity extends AppCompatActivity implements IMainActivityActi
     }
 
     @Override
-    public void errorMessage(String string){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show();
+    public void errorMessage(String string) {
+
+        if(string.equals("HTTP 404 Not Found")) {
+            FailToGetDataFromAPIDialogFragment dialogFragment=new FailToGetDataFromAPIDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(),"");
+            textView.setText("-");
+        } else {
+            Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+        }
+
     }
 
 }

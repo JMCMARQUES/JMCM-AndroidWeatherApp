@@ -2,4 +2,9 @@
     <string name="app_name">JMCM-AndroidWeatherApp</string>
     <string name="cityButton">Select the City</string>
     <string name="countryButton">Select the Country</string>
+    <string name="fail_to_get_data">The application does\'t contain the data for the given country/city.
+    Please select a different location</string>
+    <string name="ok">Ok!</string>
+    <string name="cancel">Close Message</string>
+    <string name="failToRetrieveData">Fail to retrieve the data</string>
 </resources>
