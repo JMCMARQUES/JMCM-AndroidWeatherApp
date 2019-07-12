@@ -129,5 +129,10 @@ public class MainActivity extends AppCompatActivity implements IMainActivityActi
         return dialog;
     }
 
+    @Override
+    public void showToast(String string){
+        Toast.makeText(this,string,Toast.LENGTH_SHORT).show();
+    }
+
 
 }

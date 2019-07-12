@@ -1,11 +1,15 @@
 package com.example.jmcm_androidweatherapp.apis.modules;
 
+import android.content.res.Resources;
+
+import com.example.jmcm_androidweatherapp.R;
 import com.example.jmcm_androidweatherapp.apis.country.CountryAPIRequest;
 import com.example.jmcm_androidweatherapp.apis.country.CountryCityData;
 import com.example.jmcm_androidweatherapp.apis.country.country;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainInteractor;
 import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherAPIRequest;
 import com.example.jmcm_androidweatherapp.apis.weatherData.WeatherData;
+import com.orhanobut.logger.Logger;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -48,10 +52,10 @@ public class MainInteractor implements IMainInteractor {
                                 String newCountry = e.name;
                                 countriesList.add(newCountry);
                             }
-                            System.out.println("onNext: " + countriesList);
+                            Logger.d("OnNexr: " + countriesList);
                             listener.onSuccess(countriesList);
-                        }else{
-                            Throwable e = new Throwable("Country list empty, not available!");
+                        } else {
+                            Throwable e = new Throwable(Resources.getSystem().getString(R.string.failToRetrieveData));
                             listener.onError(e);
                         }
                     }
@@ -63,12 +67,10 @@ public class MainInteractor implements IMainInteractor {
 
                     @Override
                     public void onComplete() {
-                        System.out.println("completed");
+                        listener.onComplete();
                     }
                 });
     }
-
-
 
 
     @Override
@@ -88,8 +90,8 @@ public class MainInteractor implements IMainInteractor {
                     public void onNext(WeatherData weatherData) {
                         if (weatherData != null) {
                             listener.onSuccess(messageBuild(weatherData, cityOrCountry));
-                        }else{
-                            Throwable e = new Throwable("Country Data empty, not available!");
+                        } else {
+                            Throwable e = new Throwable(Resources.getSystem().getString(R.string.failToRetrieveData));
                             listener.onError(e);
                         }
                     }
@@ -101,6 +103,7 @@ public class MainInteractor implements IMainInteractor {
 
                     @Override
                     public void onComplete() {
+                        listener.onComplete();
                     }
                 });
 
@@ -122,7 +125,7 @@ public class MainInteractor implements IMainInteractor {
                     "ºC\n - Maximum Temperature: " + temperature.format(maxTempInDegreeC) +
                     "kPa\n - Pressure: " + weatherData.main.pressure + "hPa";
 
-            System.out.println(message);
+            Logger.d(message);
 
             return message;
         }

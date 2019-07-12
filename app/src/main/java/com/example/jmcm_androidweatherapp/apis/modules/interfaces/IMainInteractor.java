@@ -11,11 +11,15 @@ public interface IMainInteractor {
     interface IOnLoadingCountryAPI {
         void onError(Throwable e);
         void onSuccess(ArrayList<String> countries);
+
+        void onComplete();
     }
 
     interface IOnLoadngWeatherAPI {
         void onError(Throwable e);
         void onSuccess(String weatherData);
+
+        void onComplete();
     }
 
 }

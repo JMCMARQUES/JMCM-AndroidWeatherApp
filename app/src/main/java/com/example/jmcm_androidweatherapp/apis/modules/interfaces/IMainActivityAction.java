@@ -10,4 +10,5 @@ public interface IMainActivityAction {
     void errorMessage(String string);
     void showProgress(String string);
     void hideProgress();
+    void showToast(String string);
 }

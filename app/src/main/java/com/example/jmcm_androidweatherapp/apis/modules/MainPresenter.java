@@ -1,8 +1,12 @@
 package com.example.jmcm_androidweatherapp.apis.modules;
 
+import android.content.res.Resources;
+
+import com.example.jmcm_androidweatherapp.R;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainActivityAction;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainInteractor;
 import com.example.jmcm_androidweatherapp.apis.modules.interfaces.IMainPresenter;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,11 @@ public class MainPresenter implements IMainPresenter {
                 mView.onCountryData(countries);
                 mView.hideProgress();
             }
+
+            @Override
+            public void onComplete() {
+                mView.showToast(((MainActivity) mView).getString(R.string.dataRetrieved));
+            }
         });
     }
 
@@ -51,6 +60,11 @@ public class MainPresenter implements IMainPresenter {
             public void onSuccess(String weatherData) {
                 mView.setText(weatherData);
                 mView.hideProgress();
+            }
+
+            @Override
+            public void onComplete() {
+                mView.showToast(((MainActivity) mView).getString(R.string.dataRetrieved));
             }
         });
     }
