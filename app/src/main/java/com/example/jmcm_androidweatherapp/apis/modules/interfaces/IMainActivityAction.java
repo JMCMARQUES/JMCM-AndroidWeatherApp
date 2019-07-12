@@ -8,4 +8,7 @@ public interface IMainActivityAction {
     void onCountryData(ArrayList<String> countries);
     void setText(String message);
     void errorMessage(String string);
+    void showProgress(String string);
+    void hideProgress();
+    void showToast(String string);
 }

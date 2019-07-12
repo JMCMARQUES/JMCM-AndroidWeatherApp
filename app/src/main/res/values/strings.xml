@@ -7,4 +7,10 @@
     <string name="ok">Ok!</string>
     <string name="cancel">Close Message</string>
     <string name="failToRetrieveData">Fail to retrieve the data</string>
+    <string name="loading_popup_message">Loading data...</string>
+    <string name="loading_list">Loading lists...</string>
+    <string name="loading_weather_data">Loading weather data...</string>
+    <string name="httpNotFound">HTTP 404 Not Found</string>
+    <string name="dataRetrieved">Data retrieved</string>
+
 </resources>
